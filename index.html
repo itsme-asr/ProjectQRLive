@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project QR Live - Bhajan Display</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background-color: #ff9933;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .bhajan-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        
+        .bhajan-title {
+            color: #ff9933;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .bhajan-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+        
+        .language-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        button {
+            background-color: #138808;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #0c6b06;
+        }
+        
+        .active {
+            background-color: #0c6b06;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #138808;
+        }
+        
+        .time-display {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        /* Developer panel styles */
+        .dev-controls {
+            background-color: #ffe0b2;
+            border: 2px dashed #ff9933;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            width: 100%;
+            display: none;
+        }
+        
+        .dev-controls.visible {
+            display: block;
+        }
+        
+        .dev-controls h3 {
+            margin-top: 0;
+            color: #d84315;
+        }
+        
+        .time-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .time-input input, .time-input select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        
+        .dev-button {
+            background-color: #d84315;
+            margin: 0.5rem;
+        }
+        
+        .dev-button:hover {
+            background-color: #bf360c;
+        }
+        
+        footer {
+            padding: 1rem;
+            background-color: #333;
+            color: white;
+        }
+
+        .dev-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            z-index: 1000;
+            opacity: 0.7;
+        }
+
+        .dev-toggle:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Project QR Live</h1>
+    </header>
+    
+    <main>
+        <div class="time-display" id="current-time"></div>
+        
+        <!-- Developer Time Controls -->
+        <div class="dev-controls" id="dev-controls">
+            <h3>Developer Time Controls</h3>
+            <div class="time-input">
+                <label for="dev-hours">Hours:</label>
+                <input type="number" id="dev-hours" min="0" max="23" value="12">
+                
+                <label for="dev-minutes">Minutes:</label>
+                <input type="number" id="dev-minutes" min="0" max="59" value="0">
+            </div>
+            
+            <button id="set-time-button" class="dev-button">Set Custom Time</button>
+            <button id="reset-time-button" class="dev-button">Reset to Real Time</button>
+            
+            <div class="time-presets">
+                <button id="preset-morning" class="dev-button">Morning (5:00 AM)</button>
+                <button id="preset-midmorning" class="dev-button">Mid-Morning (8:00 AM)</button>
+                <button id="preset-evening" class="dev-button">Evening (7:30 PM)</button>
+                <button id="preset-default" class="dev-button">Default Time (12:00 PM)</button>
+            </div>
+        </div>
+        
+        <div class="bhajan-container">
+            <h2 class="bhajan-title" id="bhajan-title">Loading Bhajan...</h2>
+            <div class="bhajan-text" id="bhajan-text"></div>
+            
+            <div class="language-buttons">
+                <button id="english-button" class="active">English</button>
+                <button id="hindi-button">Hindi</button>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>© 2025 Project QR Live</p>
+    </footer>
+
+    <!-- Developer mode toggle button (hidden visually but accessible through keyboard shortcut) -->
+    <button class="dev-toggle" id="dev-toggle">⚙️</button>
+
+    <script src="live.js"></script>
+</body>
+</html>
