@@ -7,5 +7,5 @@ ToDo:
 - Deploy on Netifiy/Vercel
 
 Additional Feature
-Dark Mode
-Font Size
+- Dark Mode
+- Font Size
