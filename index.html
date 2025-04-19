@@ -76,7 +76,7 @@
         .side-panel {
             position: fixed;
             right: 0;
-            top: 50%;
+            top: 15%;
             transform: translateY(-50%);
             z-index: 1000;
             display: flex;
@@ -85,9 +85,9 @@
         }
         
         .panel-button {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px 0 0 8px;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px 0 0 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -271,11 +271,18 @@
     </header>
     
     <!-- Side panel for theme toggle -->
-    <div class="side-panel">
-        <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">
-            ☀️
-        </button>
-    </div>
+   <div class="side-panel">
+    <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">
+        ☀️
+    </button>
+    <button id="english-button" class="panel-button active" aria-label="English language">
+        ENG
+    </button>
+    <button id="hindi-button" class="panel-button" aria-label="Hindi language">
+        HIND
+    </button>
+</div>
+
     
     <main>
         <div class="time-display" id="current-time"></div>
@@ -306,10 +313,10 @@
             <h2 class="bhajan-title" id="bhajan-title">Loading Bhajan...</h2>
             <div class="bhajan-text" id="bhajan-text"></div>
             
-            <div class="language-buttons">
+            <!-- <div class="language-buttons">
                 <button id="english-button" class="active">English</button>
                 <button id="hindi-button">Hindi</button>
-            </div>
+            </div> -->
         </div>
     </main>
     
