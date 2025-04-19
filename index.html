@@ -1,10 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project QR Live - Bhajan Display</title>
     <style>
+        :root {
+            --primary-color: #ff9933;
+            --primary-dark: #e67300;
+            --accent-color: #138808;
+            --accent-dark: #0c6b06;
+            --bg-color: #f5f5f5;
+            --card-bg: white;
+            --text-color: #333;
+            --secondary-text: #666;
+            --header-bg: #ff9933;
+            --header-text: white;
+            --footer-bg: #333;
+            --footer-text: white;
+            --shadow-color: rgba(0,0,0,0.1);
+            --dev-bg: #ffe0b2;
+            --dev-border: #ff9933;
+            --dev-text: #d84315;
+            --dev-button: #d84315;
+            --dev-button-hover: #bf360c;
+            --panel-bg: rgba(255, 255, 255, 0.9);
+            --panel-shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #ff9933;
+            --primary-dark: #ffb366;
+            --accent-color: #26a69a;
+            --accent-dark: #4db6ac;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --secondary-text: #b0b0b0;
+            --header-bg: #262626;
+            --header-text: #ff9933;
+            --footer-bg: #262626;
+            --footer-text: #e0e0e0;
+            --shadow-color: rgba(0,0,0,0.3);
+            --dev-bg: #3d3223;
+            --dev-border: #ff9933;
+            --dev-text: #ff9933;
+            --dev-button: #e67300;
+            --dev-button-hover: #ffb366;
+            --panel-bg: rgba(30, 30, 30, 0.9);
+            --panel-shadow: rgba(0, 0, 0, 0.4);
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -13,14 +59,59 @@
             flex-direction: column;
             min-height: 100vh;
             text-align: center;
-            background-color: #f5f5f5;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
         }
         
         header {
-            background-color: #ff9933;
-            color: white;
+            background-color: var(--header-bg);
+            color: var(--header-text);
             padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+        
+        /* Side panel for controls */
+        .side-panel {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .panel-button {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px 0 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: none;
+            box-shadow: -2px 0 8px var(--panel-shadow);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+        
+        .panel-button:hover {
+            width: 54px;
+            box-shadow: -3px 0 12px var(--panel-shadow);
+        }
+        
+        .theme-toggle {
+            background-color: var(--panel-bg);
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
         }
         
         main {
@@ -35,16 +126,17 @@
         }
         
         .bhajan-container {
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 8px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px var(--shadow-color);
             width: 100%;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
         
         .bhajan-title {
-            color: #ff9933;
+            color: var(--primary-color);
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
         }
@@ -63,7 +155,7 @@
         }
         
         button {
-            background-color: #138808;
+            background-color: var(--accent-color);
             color: white;
             border: none;
             padding: 0.75rem 2rem;
@@ -74,29 +166,30 @@
         }
         
         button:hover {
-            background-color: #0c6b06;
+            background-color: var(--accent-dark);
         }
         
         .active {
-            background-color: #0c6b06;
-            box-shadow: 0 0 0 2px white, 0 0 0 4px #138808;
+            background-color: var(--accent-dark);
+            box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--accent-color);
         }
         
         .time-display {
             font-size: 1.2rem;
             margin-bottom: 1rem;
-            color: #666;
+            color: var(--secondary-text);
         }
 
         /* Developer panel styles */
         .dev-controls {
-            background-color: #ffe0b2;
-            border: 2px dashed #ff9933;
+            background-color: var(--dev-bg);
+            border: 2px dashed var(--dev-border);
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 2rem;
             width: 100%;
             display: none;
+            transition: background-color 0.3s, border-color 0.3s;
         }
         
         .dev-controls.visible {
@@ -105,7 +198,7 @@
         
         .dev-controls h3 {
             margin-top: 0;
-            color: #d84315;
+            color: var(--dev-text);
         }
         
         .time-input {
@@ -120,29 +213,32 @@
             padding: 0.5rem;
             border-radius: 4px;
             border: 1px solid #ccc;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
         
         .dev-button {
-            background-color: #d84315;
+            background-color: var(--dev-button);
             margin: 0.5rem;
         }
         
         .dev-button:hover {
-            background-color: #bf360c;
+            background-color: var(--dev-button-hover);
         }
         
         footer {
             padding: 1rem;
-            background-color: #333;
-            color: white;
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .dev-toggle {
             position: fixed;
             bottom: 10px;
             right: 10px;
-            background-color: #333;
-            color: white;
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
             border: none;
             width: 40px;
             height: 40px;
@@ -152,10 +248,20 @@
             line-height: 1;
             z-index: 1000;
             opacity: 0.7;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .dev-toggle:hover {
             opacity: 1;
+        }
+        
+        /* Make sure the side panel doesn't interfere with main content on smaller screens */
+        @media (max-width: 768px) {
+            .side-panel {
+                top: auto;
+                bottom: 70px;
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -163,6 +269,13 @@
     <header>
         <h1>Project QR Live</h1>
     </header>
+    
+    <!-- Side panel for theme toggle -->
+    <div class="side-panel">
+        <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">
+            ☀️
+        </button>
+    </div>
     
     <main>
         <div class="time-display" id="current-time"></div>
@@ -208,5 +321,37 @@
     <button class="dev-toggle" id="dev-toggle">⚙️</button>
 
     <script src="live.js"></script>
+    <script>
+        // Dark mode toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            // Check for saved theme preference or respect OS theme setting
+            const savedTheme = localStorage.getItem('theme') || 
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            
+            // Apply the saved theme on page load
+            htmlElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // Toggle theme when button is clicked
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            // Update theme icon based on current theme
+            function updateThemeIcon(theme) {
+                themeToggle.innerHTML = theme === 'light' ? '☀️' : '🌙';
+                themeToggle.setAttribute('aria-label', 
+                    theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+            }
+        });
+    </script>
 </body>
 </html>
