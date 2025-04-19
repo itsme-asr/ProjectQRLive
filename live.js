@@ -27,7 +27,7 @@ let customMinutes = 0;
 // Fetch bhajans from JSON file
 async function loadBhajansFromJSON() {
     try {
-        const response = await fetch('Arti.json');
+        const response = await fetch('aarti.json');
         const data = await response.json();
         bhajans = data.bhajans || {};
         console.log('Bhajans loaded successfully:', bhajans);
@@ -242,6 +242,7 @@ englishButton.addEventListener('click', () => {
 hindiButton.addEventListener('click', () => {
     displayBhajan(currentBhajan, 'hindi');
 });
+
 
 // Initialize the app when page loads
 window.addEventListener('load', initApp);

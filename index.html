@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project QR Live - Bhajan Display</title>
+    <title>Live Aarti - Aarti Display</title>
     <style>
         :root {
             --primary-color: #ff9933;
@@ -18,7 +19,7 @@
             --header-text: white;
             --footer-bg: #333;
             --footer-text: white;
-            --shadow-color: rgba(0,0,0,0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
             --dev-bg: #ffe0b2;
             --dev-border: #ff9933;
             --dev-text: #d84315;
@@ -41,7 +42,7 @@
             --header-text: #ff9933;
             --footer-bg: #262626;
             --footer-text: #e0e0e0;
-            --shadow-color: rgba(0,0,0,0.3);
+            --shadow-color: rgba(0, 0, 0, 0.3);
             --dev-bg: #3d3223;
             --dev-border: #ff9933;
             --dev-text: #ff9933;
@@ -50,7 +51,7 @@
             --panel-bg: rgba(30, 30, 30, 0.9);
             --panel-shadow: rgba(0, 0, 0, 0.4);
         }
-        
+
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -64,14 +65,98 @@
             transition: background-color 0.3s, color 0.3s;
             position: relative;
         }
-        
+
         header {
             background-color: var(--header-bg);
             color: var(--header-text);
             padding: 1rem;
             box-shadow: 0 2px 4px var(--shadow-color);
         }
-        
+
+        .content {
+            transition: font-size 0.3s ease;
+        }
+
+        /* Font size classes */
+        .font-small {
+            font-size: 14px;
+        }
+
+        .font-medium {
+            font-size: 18px;
+        }
+
+        .font-large {
+            font-size: 22px;
+        }
+
+        /* Right side panel */
+        .side-panel1 {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .font-size-control {
+            position: relative;
+        }
+
+        .font-size-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .font-size-options {
+            position: absolute;
+            right: 100%;
+            top: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            width: 100px;
+        }
+
+        .font-size-control:hover .font-size-options {
+            max-height: 150px;
+            opacity: 1;
+        }
+
+        .font-size-option {
+            padding: 8px 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .font-size-option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .active {
+            background-color: #e6f2ff;
+        }
+
+        /* Font icon */
+        .font-icon {
+            font-size: 18px;
+        }
+
         /* Side panel for controls */
         .side-panel {
             position: fixed;
@@ -83,7 +168,7 @@
             flex-direction: column;
             gap: 10px;
         }
-        
+
         .panel-button {
             width: 60px;
             height: 60px;
@@ -100,12 +185,12 @@
             transition: all 0.3s ease;
             padding: 0;
         }
-        
+
         .panel-button:hover {
             width: 54px;
             box-shadow: -3px 0 12px var(--panel-shadow);
         }
-        
+
         .theme-toggle {
             background-color: var(--panel-bg);
             border: none;
@@ -113,7 +198,7 @@
             cursor: pointer;
             color: var(--text-color);
         }
-        
+
         main {
             flex: 1;
             padding: 2rem;
@@ -124,7 +209,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .bhajan-container {
             background-color: var(--card-bg);
             border-radius: 8px;
@@ -134,26 +219,26 @@
             width: 100%;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
-        
+
         .bhajan-title {
             color: var(--primary-color);
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
         }
-        
+
         .bhajan-text {
             font-size: 1.2rem;
             line-height: 1.8;
             white-space: pre-line;
         }
-        
+
         .language-buttons {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin-top: 2rem;
         }
-        
+
         button {
             background-color: var(--accent-color);
             color: white;
@@ -164,16 +249,16 @@
             font-size: 1rem;
             transition: background-color 0.2s;
         }
-        
+
         button:hover {
             background-color: var(--accent-dark);
         }
-        
+
         .active {
             background-color: var(--accent-dark);
             box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--accent-color);
         }
-        
+
         .time-display {
             font-size: 1.2rem;
             margin-bottom: 1rem;
@@ -191,16 +276,16 @@
             display: none;
             transition: background-color 0.3s, border-color 0.3s;
         }
-        
+
         .dev-controls.visible {
             display: block;
         }
-        
+
         .dev-controls h3 {
             margin-top: 0;
             color: var(--dev-text);
         }
-        
+
         .time-input {
             display: flex;
             gap: 10px;
@@ -208,24 +293,25 @@
             justify-content: center;
             align-items: center;
         }
-        
-        .time-input input, .time-input select {
+
+        .time-input input,
+        .time-input select {
             padding: 0.5rem;
             border-radius: 4px;
             border: 1px solid #ccc;
             background-color: var(--card-bg);
             color: var(--text-color);
         }
-        
+
         .dev-button {
             background-color: var(--dev-button);
-            margin: 0.5rem;
+            margin: 0.55rem;
         }
-        
+
         .dev-button:hover {
             background-color: var(--dev-button-hover);
         }
-        
+
         footer {
             padding: 1rem;
             background-color: var(--footer-bg);
@@ -237,24 +323,27 @@
             position: fixed;
             bottom: 10px;
             right: 10px;
-            background-color: var(--footer-bg);
+            background-color: var(--bg-color);
             color: var(--footer-text);
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            border-radius: 100%;
             cursor: pointer;
             font-size: 1.5rem;
             line-height: 1;
             z-index: 1000;
             opacity: 0.7;
-            transition: background-color 0.3s, color 0.3s;
+            /* transition: background-color 0.3s, color 0.3s; */
         }
+
+        .panel-button.active {
+            box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--accent-color);
+        }
+
 
         .dev-toggle:hover {
             opacity: 1;
         }
-        
+
         /* Make sure the side panel doesn't interfere with main content on smaller screens */
         @media (max-width: 768px) {
             .side-panel {
@@ -263,44 +352,59 @@
                 transform: none;
             }
         }
+
     </style>
 </head>
+
 <body>
     <header>
-        <h1>Project QR Live</h1>
+        <h1>Live Aarti - Display</h1>
     </header>
-    
-    <!-- Side panel for theme toggle -->
-   <div class="side-panel">
-    <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">
-        ☀️
-    </button>
-    <button id="english-button" class="panel-button active" aria-label="English language">
-        ENG
-    </button>
-    <button id="hindi-button" class="panel-button" aria-label="Hindi language">
-        HIND
-    </button>
-</div>
 
-    
+    <!-- Side panel for theme toggle -->
+    <div class="side-panel">
+        <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">
+            ☀️
+        </button>
+        <button id="english-button" class="panel-button active" aria-label="English language">
+            <span style="font-weight: bold;">EN</span>
+        </button>
+        <button id="hindi-button" class="panel-button" aria-label="Hindi language">
+            <span style="font-weight: bold;">HI</span>
+        </button>
+    </div>
+
+    <div class="side-panel1">
+        <div class="font-size-control">
+            <button class="font-size-btn" title="Font Size">
+                <span class="font-icon">F</span>
+            </button>
+            <div class="font-size-options">
+                <div class="font-size-option" data-size="small">A-</div>
+                <div class="font-size-option active" data-size="medium">A</div>
+                <div class="font-size-option" data-size="large">A+</div>
+            </div>
+        </div>
+    </div>
+
+
     <main>
         <div class="time-display" id="current-time"></div>
-        
+
         <!-- Developer Time Controls -->
         <div class="dev-controls" id="dev-controls">
             <h3>Developer Time Controls</h3>
             <div class="time-input">
                 <label for="dev-hours">Hours:</label>
                 <input type="number" id="dev-hours" min="0" max="23" value="12">
-                
+
                 <label for="dev-minutes">Minutes:</label>
                 <input type="number" id="dev-minutes" min="0" max="59" value="0">
             </div>
-            
+
             <button id="set-time-button" class="dev-button">Set Custom Time</button>
             <button id="reset-time-button" class="dev-button">Reset to Real Time</button>
-            
+
             <div class="time-presets">
                 <button id="preset-morning" class="dev-button">Morning (5:00 AM)</button>
                 <button id="preset-midmorning" class="dev-button">Mid-Morning (8:00 AM)</button>
@@ -308,20 +412,17 @@
                 <button id="preset-default" class="dev-button">Default Time (12:00 PM)</button>
             </div>
         </div>
-        
-        <div class="bhajan-container">
-            <h2 class="bhajan-title" id="bhajan-title">Loading Bhajan...</h2>
-            <div class="bhajan-text" id="bhajan-text"></div>
-            
-            <!-- <div class="language-buttons">
-                <button id="english-button" class="active">English</button>
-                <button id="hindi-button">Hindi</button>
-            </div> -->
-        </div>
+            <!-- <div class="content font-medium"> -->
+                <div class="bhajan-container">
+                    <h2 class="bhajan-title" id="bhajan-title">Loading Bhajan...</h2>
+                    <div class="bhajan-text" id="bhajan-text"></div>
+                </div>
+            <!-- </div> -->
     </main>
-    
+
+
     <footer>
-        <p>© 2025 Project QR Live</p>
+        <p>© 2025 Live Aarti</p>
     </footer>
 
     <!-- Developer mode toggle button (hidden visually but accessible through keyboard shortcut) -->
@@ -333,32 +434,63 @@
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
             const htmlElement = document.documentElement;
-            
+
+            // const contentElement = document.querySelector('.content');
+            // const fontOptions = document.querySelectorAll('.font-size-option');
+
+            // fontOptions.forEach(option => {
+            //     option.addEventListener('click', function () {
+            //         const size = this.dataset.size;
+            //         setFontSize(size);
+
+            //         // Update active class
+            //         fontOptions.forEach(opt => opt.classList.remove('active'));
+            //         this.classList.add('active');
+            //     });
+            // });
+
+            // // Function to set font size
+            // function setFontSize(size) {
+            //     console.log(size);
+                
+            //     // Remove existing font size classes
+            //     contentElement.classList.remove('font-small', 'font-medium', 'font-large');
+            //     // Add new font size class
+            //     contentElement.classList.add('font-' + size);
+            //     // No localStorage in this version
+            // }
             // Check for saved theme preference or respect OS theme setting
-            const savedTheme = localStorage.getItem('theme') || 
+            const savedTheme = localStorage.getItem('theme') ||
                 (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            
+
             // Apply the saved theme on page load
             htmlElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
-            
+
             // Toggle theme when button is clicked
             themeToggle.addEventListener('click', () => {
                 const currentTheme = htmlElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
+
                 htmlElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
             });
-            
+
             // Update theme icon based on current theme
             function updateThemeIcon(theme) {
                 themeToggle.innerHTML = theme === 'light' ? '☀️' : '🌙';
-                themeToggle.setAttribute('aria-label', 
+                themeToggle.setAttribute('aria-label',
                     theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
             }
+
+
+            // No localStorage usage in this version
+
+            // Add click event to font options
+            
         });
     </script>
 </body>
+
 </html>
