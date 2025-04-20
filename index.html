@@ -77,91 +77,10 @@
             transition: font-size 0.3s ease;
         }
 
-        /* Font size classes */
-        .font-small {
-            font-size: 14px;
-        }
-
-        .font-medium {
-            font-size: 18px;
-        }
-
-        .font-large {
-            font-size: 22px;
-        }
-
-        /* Right side panel */
-        .side-panel1 {
-            position: fixed;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1000;
-        }
-
-        .font-size-control {
-            position: relative;
-        }
-
-        .font-size-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
-        }
-
-        .font-size-options {
-            position: absolute;
-            right: 100%;
-            top: 0;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.3s ease, opacity 0.3s ease;
-            opacity: 0;
-            width: 100px;
-        }
-
-        .font-size-control:hover .font-size-options {
-            max-height: 150px;
-            opacity: 1;
-        }
-
-        .font-size-option {
-            padding: 8px 15px;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-
-        .font-size-option:hover {
-            background-color: #f0f0f0;
-        }
-
-        .active {
-            background-color: #e6f2ff;
-        }
-
-        /* Font icon */
-        .font-icon {
-            font-size: 18px;
-        }
-
-        /* Side panel for controls */
         .side-panel {
             position: fixed;
             right: 0;
-            top: 15%;
+            top: 35%;
             transform: translateY(-50%);
             z-index: 1000;
             display: flex;
@@ -265,7 +184,6 @@
             color: var(--secondary-text);
         }
 
-        /* Developer panel styles */
         .dev-controls {
             background-color: var(--dev-bg);
             border: 2px dashed var(--dev-border);
@@ -332,19 +250,16 @@
             line-height: 1;
             z-index: 1000;
             opacity: 0.7;
-            /* transition: background-color 0.3s, color 0.3s; */
         }
 
         .panel-button.active {
             box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--accent-color);
         }
 
-
         .dev-toggle:hover {
             opacity: 1;
         }
 
-        /* Make sure the side panel doesn't interfere with main content on smaller screens */
         @media (max-width: 768px) {
             .side-panel {
                 top: auto;
@@ -352,7 +267,6 @@
                 transform: none;
             }
         }
-
     </style>
 </head>
 
@@ -361,32 +275,15 @@
         <h1>Live Aarti - Display</h1>
     </header>
 
-    <!-- Side panel for theme toggle -->
+    <!-- Side panel for theme, language, and font size toggle -->
     <div class="side-panel">
-        <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">
-            ☀️
-        </button>
-        <button id="english-button" class="panel-button active" aria-label="English language">
-            <span style="font-weight: bold;">EN</span>
-        </button>
-        <button id="hindi-button" class="panel-button" aria-label="Hindi language">
-            <span style="font-weight: bold;">HI</span>
-        </button>
+        <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">☀️</button>
+        <button id="english-button" class="panel-button active" aria-label="English language"><strong>EN</strong></button>
+        <button id="hindi-button" class="panel-button" aria-label="Hindi language"><strong>HI</strong></button>
+        <button id="font-small" class="panel-button" aria-label="Small font size">A-</button>
+        <button id="font-medium" class="panel-button active" aria-label="Medium font size">A</button>
+        <button id="font-large" class="panel-button" aria-label="Large font size">A+</button>
     </div>
-
-    <div class="side-panel1">
-        <div class="font-size-control">
-            <button class="font-size-btn" title="Font Size">
-                <span class="font-icon">F</span>
-            </button>
-            <div class="font-size-options">
-                <div class="font-size-option" data-size="small">A-</div>
-                <div class="font-size-option active" data-size="medium">A</div>
-                <div class="font-size-option" data-size="large">A+</div>
-            </div>
-        </div>
-    </div>
-
 
     <main>
         <div class="time-display" id="current-time"></div>
@@ -397,14 +294,11 @@
             <div class="time-input">
                 <label for="dev-hours">Hours:</label>
                 <input type="number" id="dev-hours" min="0" max="23" value="12">
-
                 <label for="dev-minutes">Minutes:</label>
                 <input type="number" id="dev-minutes" min="0" max="59" value="0">
             </div>
-
             <button id="set-time-button" class="dev-button">Set Custom Time</button>
             <button id="reset-time-button" class="dev-button">Reset to Real Time</button>
-
             <div class="time-presets">
                 <button id="preset-morning" class="dev-button">Morning (5:00 AM)</button>
                 <button id="preset-midmorning" class="dev-button">Mid-Morning (8:00 AM)</button>
@@ -412,85 +306,76 @@
                 <button id="preset-default" class="dev-button">Default Time (12:00 PM)</button>
             </div>
         </div>
-            <!-- <div class="content font-medium"> -->
-                <div class="bhajan-container">
-                    <h2 class="bhajan-title" id="bhajan-title">Loading Bhajan...</h2>
-                    <div class="bhajan-text" id="bhajan-text"></div>
-                </div>
-            <!-- </div> -->
-    </main>
 
+        <div class="bhajan-container">
+            <h2 class="bhajan-title" id="bhajan-title">Loading Bhajan...</h2>
+            <div class="bhajan-text" id="bhajan-text"></div>
+        </div>
+    </main>
 
     <footer>
         <p>© 2025 Live Aarti</p>
     </footer>
 
-    <!-- Developer mode toggle button (hidden visually but accessible through keyboard shortcut) -->
     <button class="dev-toggle" id="dev-toggle">⚙️</button>
 
     <script src="live.js"></script>
     <script>
-        // Dark mode toggle functionality
+        // Theme toggle
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
             const htmlElement = document.documentElement;
 
-            // const contentElement = document.querySelector('.content');
-            // const fontOptions = document.querySelectorAll('.font-size-option');
-
-            // fontOptions.forEach(option => {
-            //     option.addEventListener('click', function () {
-            //         const size = this.dataset.size;
-            //         setFontSize(size);
-
-            //         // Update active class
-            //         fontOptions.forEach(opt => opt.classList.remove('active'));
-            //         this.classList.add('active');
-            //     });
-            // });
-
-            // // Function to set font size
-            // function setFontSize(size) {
-            //     console.log(size);
-                
-            //     // Remove existing font size classes
-            //     contentElement.classList.remove('font-small', 'font-medium', 'font-large');
-            //     // Add new font size class
-            //     contentElement.classList.add('font-' + size);
-            //     // No localStorage in this version
-            // }
-            // Check for saved theme preference or respect OS theme setting
-            const savedTheme = localStorage.getItem('theme') ||
+            const savedTheme = localStorage.getItem('theme') || 
                 (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-            // Apply the saved theme on page load
             htmlElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
 
-            // Toggle theme when button is clicked
             themeToggle.addEventListener('click', () => {
                 const currentTheme = htmlElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
                 htmlElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
             });
 
-            // Update theme icon based on current theme
             function updateThemeIcon(theme) {
                 themeToggle.innerHTML = theme === 'light' ? '☀️' : '🌙';
-                themeToggle.setAttribute('aria-label',
-                    theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+                themeToggle.setAttribute('aria-label', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
             }
 
+            // Font size controls
+            const fontButtons = {
+                small: document.getElementById('font-small'),
+                medium: document.getElementById('font-medium'),
+                large: document.getElementById('font-large')
+            };
+            const content = document.querySelector('.bhajan-text');
 
-            // No localStorage usage in this version
+            function setFontSize(size) {
+                if (size === 'small') {
+                    content.style.fontSize = '1rem';
+                } else if (size === 'medium') {
+                    content.style.fontSize = '1.2rem';
+                } else if (size === 'large') {
+                    content.style.fontSize = '1.5rem';
+                }
 
-            // Add click event to font options
-            
+                localStorage.setItem('fontSize', size);
+
+                Object.keys(fontButtons).forEach(key => {
+                    fontButtons[key].classList.toggle('active', key === size);
+                });
+            }
+
+            fontButtons.small.addEventListener('click', () => setFontSize('small'));
+            fontButtons.medium.addEventListener('click', () => setFontSize('medium'));
+            fontButtons.large.addEventListener('click', () => setFontSize('large'));
+
+            const savedSize = localStorage.getItem('fontSize') || 'medium';
+            setFontSize(savedSize);
         });
     </script>
 </body>
-
 </html>
