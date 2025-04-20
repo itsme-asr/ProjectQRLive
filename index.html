@@ -27,6 +27,7 @@
             --dev-button-hover: #bf360c;
             --panel-bg: rgba(255, 255, 255, 0.9);
             --panel-shadow: rgba(0, 0, 0, 0.2);
+            --animation-duration: 0.5s;
         }
 
         [data-theme="dark"] {
@@ -77,21 +78,53 @@
             transition: font-size 0.3s ease;
         }
 
+        /* Side panel styling */
         .side-panel {
             position: fixed;
             right: 0;
             top: 35%;
             transform: translateY(-50%);
             z-index: 1000;
+            transition: transform var(--animation-duration) cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .side-panel.off-screen {
+            transform: translate(100%, -50%);
+            animation: slideFromOffScreen var(--animation-duration) cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes slideFromOffScreen {
+            0% {
+                transform: translate(100%, -50%);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        .panel-buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            background-color: var(--panel-bg);
+            padding: 10px;
+            border-radius: 15px 0 0 15px;
+            box-shadow: -3px 0 10px var(--panel-shadow);
+            transition: transform var(--animation-duration) cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .panel-button {
-            width: 60px;
+        .panel-buttons.hidden {
+            transform: translateX(calc(100% + 40px));
+        }
+
+        .panel-toggle {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
             height: 60px;
-            border-radius: 15px 0 0 8px;
+            border-radius: 8px 0 0 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,13 +134,68 @@
             border: none;
             box-shadow: -2px 0 8px var(--panel-shadow);
             font-size: 1.5rem;
+            transition: left 0.3s ease;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .panel-buttons.hidden + .panel-toggle {
+            left: 40px;
+        }
+
+        .panel-toggle:hover {
+            box-shadow: -3px 0 12px var(--panel-shadow);
+        }
+
+        .panel-toggle.slide-in {
+            animation: slideInToggle 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .panel-toggle.slide-out {
+            animation: slideOutToggle 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes slideInToggle {
+            0% {
+                left: -40px;
+                opacity: 0;
+            }
+            100% {
+                left: 40;
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutToggle {
+            0% {
+                left: 40;
+                opacity: 1;
+            }
+            100% {
+                left: -40px;
+                opacity: 0;
+            }
+        }
+
+        .panel-button {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.5rem;
             transition: all 0.3s ease;
             padding: 0;
         }
 
         .panel-button:hover {
-            width: 54px;
-            box-shadow: -3px 0 12px var(--panel-shadow);
+            background-color: rgba(var(--accent-color), 0.1);
+            transform: scale(1.05);
         }
 
         .theme-toggle {
@@ -266,6 +354,52 @@
                 bottom: 70px;
                 transform: none;
             }
+            .side-panel.off-screen {
+                transform: translateX(100%);
+                animation: slideFromOffScreenMobile var(--animation-duration) cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            }
+            @keyframes slideFromOffScreenMobile {
+                0% {
+                    transform: translateX(100%);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
+            .panel-toggle {
+                top: 0;
+                transform: translateY(-100%);
+                height: 40px;
+                width: 60px;
+                border-radius: 8px 8px 0 0;
+                left: auto;
+            }
+            .panel-toggle.slide-in {
+                animation: slideInToggleMobile 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            }
+            .panel-toggle.slide-out {
+                animation: slideOutToggleMobile 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            }
+            @keyframes slideInToggleMobile {
+                0% {
+                    transform: translateY(-10px);
+                    opacity: 0;
+                }
+                100% {
+                    transform: translateY(-100%);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutToggleMobile {
+                0% {
+                    transform: translateY(-100%);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-40px);
+                    opacity: 0;
+                }
+            }
         }
     </style>
 </head>
@@ -275,14 +409,17 @@
         <h1>Live Aarti - Display</h1>
     </header>
 
-    <!-- Side panel for theme, language, and font size toggle -->
-    <div class="side-panel">
-        <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">☀️</button>
-        <button id="english-button" class="panel-button active" aria-label="English language"><strong>EN</strong></button>
-        <button id="hindi-button" class="panel-button" aria-label="Hindi language"><strong>HI</strong></button>
-        <button id="font-small" class="panel-button" aria-label="Small font size">A-</button>
-        <button id="font-medium" class="panel-button active" aria-label="Medium font size">A</button>
-        <button id="font-large" class="panel-button" aria-label="Large font size">A+</button>
+    <!-- Side panel with toggle button -->
+    <div id="side-panel" class="side-panel off-screen">
+        <div class="panel-buttons" id="panel-buttons">
+            <button id="theme-toggle" class="panel-button" aria-label="Toggle dark mode">☀️</button>
+            <button id="english-button" class="panel-button active" aria-label="English language"><strong>EN</strong></button>
+            <button id="hindi-button" class="panel-button" aria-label="Hindi language"><strong>HI</strong></button>
+            <button id="font-small" class="panel-button" aria-label="Small font size">A-</button>
+            <button id="font-medium" class="panel-button active" aria-label="Medium font size">A</button>
+            <button id="font-large" class="panel-button" aria-label="Large font size">A+</button>
+        </div>
+        <button id="panel-toggle" class="panel-toggle slide-in" aria-label="Toggle side panel">◀</button>
     </div>
 
     <main>
@@ -325,6 +462,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
             const htmlElement = document.documentElement;
+            const sidePanel = document.getElementById('side-panel');
+
+            // Initial load animation
+            setTimeout(() => {
+                sidePanel.classList.remove('off-screen');
+            }, 300);
 
             const savedTheme = localStorage.getItem('theme') || 
                 (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -375,6 +518,59 @@
 
             const savedSize = localStorage.getItem('fontSize') || 'medium';
             setFontSize(savedSize);
+
+            // Side panel toggle with animation
+            const panelToggle = document.getElementById('panel-toggle');
+            const panelButtons = document.getElementById('panel-buttons');
+            
+            // Check for saved panel state
+            const isPanelHidden = localStorage.getItem('panelHidden') === 'true';
+            if (isPanelHidden) {
+                panelButtons.classList.add('hidden');
+                panelToggle.innerHTML = '▶';
+                panelToggle.setAttribute('aria-label', 'Show side panel');
+            } else {
+                panelToggle.innerHTML = '◀';
+                panelToggle.setAttribute('aria-label', 'Hide side panel');
+            }
+
+            panelToggle.addEventListener('click', () => {
+                // Toggle button animation
+                panelToggle.classList.remove('slide-in');
+                panelToggle.classList.add('slide-out');
+                
+                setTimeout(() => {
+                    // Toggle panel visibility
+                    panelButtons.classList.toggle('hidden');
+                    const isHidden = panelButtons.classList.contains('hidden');
+                    
+                    // Update toggle button icon and accessibility label
+                    panelToggle.innerHTML = isHidden ? '▶' : '◀';
+                    panelToggle.setAttribute('aria-label', isHidden ? 'Show side panel' : 'Hide side panel');
+                    
+                    // Update toggle button position explicitly when animation ends
+                    if (isHidden) {
+                        panelToggle.style.left = '40px';
+                    } else {
+                        panelToggle.style.left = '-40px';
+                    }
+                    
+                    // Save panel state to local storage
+                    localStorage.setItem('panelHidden', isHidden);
+                    
+                    // Reset animation classes
+                    panelToggle.classList.remove('slide-out');
+                    panelToggle.classList.add('slide-in');
+                }, 250);
+            });
+            
+            // Dev controls toggle
+            const devToggle = document.getElementById('dev-toggle');
+            const devControls = document.getElementById('dev-controls');
+            
+            devToggle.addEventListener('click', () => {
+                devControls.classList.toggle('visible');
+            });
         });
     </script>
 </body>
