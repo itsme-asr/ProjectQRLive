@@ -23,6 +23,8 @@ let currentBhajan = null;
 let useCustomTime = false;
 let customHours = 12;
 let customMinutes = 0;
+// Set default language to Hindi instead of English
+let currentLanguage = 'hindi';
 
 // Fetch bhajans from JSON file
 async function loadBhajansFromJSON() {
@@ -35,6 +37,10 @@ async function loadBhajansFromJSON() {
         // Initialize after loading data
         updateTime();
         updateBhajan();
+        
+        // Set Hindi button as active initially
+        hindiButton.classList.add('active');
+        englishButton.classList.remove('active');
     } catch (error) {
         console.error('Error loading bhajans:', error);
         bhajanText.textContent = 'Error loading bhajans. Please try again later.';
@@ -98,11 +104,11 @@ function selectBhajanByTime() {
     }
     
     // Return default bhajan if no time match
-    return bhajans.default || Object.values(bhajans)[9];
+    return bhajans.default || Object.values(bhajans)[0];
 }
 
 // Display bhajan
-function displayBhajan(bhajan, language = 'english') {
+function displayBhajan(bhajan, language = currentLanguage) {
     if (!bhajan) return;
     
     currentBhajan = bhajan;
@@ -110,7 +116,7 @@ function displayBhajan(bhajan, language = 'english') {
     
     // Use language keys from JSON
     const textKey = language === 'english' ? 'en' : 'hi';
-    bhajanText.textContent = bhajan[textKey] || bhajan.english || 'Text not available';
+    bhajanText.textContent = bhajan[textKey] || bhajan.en || 'Text not available';
     
     // Update active button state
     if (language === 'english') {
@@ -120,6 +126,9 @@ function displayBhajan(bhajan, language = 'english') {
         hindiButton.classList.add('active');
         englishButton.classList.remove('active');
     }
+    
+    // Update current language preference
+    currentLanguage = language;
 }
 
 // Update bhajan based on current time
@@ -128,8 +137,7 @@ function updateBhajan() {
     
     // Only update if the bhajan has changed
     if (!currentBhajan || bhajan.title !== currentBhajan.title) {
-        // Get the current language preference
-        const currentLanguage = hindiButton.classList.contains('active') ? 'hindi' : 'english';
+        // Use the current language preference (now defaults to Hindi)
         displayBhajan(bhajan, currentLanguage);
     }
 }
@@ -242,7 +250,6 @@ englishButton.addEventListener('click', () => {
 hindiButton.addEventListener('click', () => {
     displayBhajan(currentBhajan, 'hindi');
 });
-
 
 // Initialize the app when page loads
 window.addEventListener('load', initApp);
