@@ -459,8 +459,8 @@ bhakativinoda dekhe gorāra sampada`,
   {
     id: 9,
     title: "Narasimha Aati (Evening) ",
-    startTime: "19:25",
-    endTime: "19:40",
+    startTime: "19:20",
+    endTime: "19:30",
     lyrics: {
       en: `(1)
 namas te narasiṁhāya
@@ -570,7 +570,7 @@ dīna kṛṣṇa-dāsa kohe nāma-saṅkīrtana`,
     id: 11,
     title: "Sri Damodar Ashtakam",
     startTime: "19:30",
-    endTime: "20:00",
+    endTime: "19:45",
     lyrics: {
       en: `(1)
 namāmīśvaraṁ sac-cid-ānanda-rūpaṁ
